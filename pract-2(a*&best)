@@ -1,0 +1,118 @@
+Practical-2
+
+A)	Implement A* search algorithm for Romanian map problem.
+
+Code
+import queue as Q
+from RMP import dict_gn
+from RMP import dict_hn
+
+start='Arad'
+goal='Bucharest'
+result=''
+
+def get_fn(citystr):
+    cities=citystr.split(" , ")
+    hn=gn=0
+    for ctr in range(0, len(cities)-1):
+        gn=gn+dict_gn[cities[ctr]][cities[ctr+1]]
+    hn=dict_hn[cities[len(cities)-1]]
+    return(hn+gn)
+
+def expand(cityq):
+    global result
+    tot, citystr, thiscity=cityq.get()
+    if thiscity==goal:
+        result=citystr+" : : "+str(tot)
+        return
+    for cty in dict_gn[thiscity]:
+        cityq.put((get_fn(citystr+" , "+cty), citystr+" , "+cty, cty))
+    expand(cityq)
+
+def main():
+    cityq=Q.PriorityQueue()
+    thiscity=start
+    cityq.put((get_fn(start),start,thiscity))
+    expand(cityq)
+    print("The A* path with the total is: ")
+    print(result)
+
+main()
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+
+ 
+
+B) Implement recursive best-first search algorithm for Romanian map problem.
+
+Code:
+from queue import PriorityQueue
+v = 14
+graph = [[] for i in range(v)]
+
+# Function For Implementing Best First Search
+# Gives output path having lowest cost
+def best_first_search(actual_Src, target, n):
+	visited = [False] * n
+	pq = PriorityQueue()
+	pq.put((0, actual_Src))
+	visited[actual_Src] = True
+	
+	while pq.empty() == False:
+		u = pq.get()[1]
+		# Displaying the path having lowest cost
+		print(u, end=" ")
+		if u == target:
+			break
+
+		for v, c in graph[u]:
+			if visited[v] == False:
+				visited[v] = True
+				pq.put((c, v))
+	print()
+
+# Function for adding edges to graph
+def addedge(x, y, cost):
+	graph[x].append((y, cost))
+	graph[y].append((x, cost))
+# The nodes shown in above example(by alphabets) are
+# implemented using integers addedge(x,y,cost);
+addedge(0, 1, 3)
+addedge(0, 2, 6)
+addedge(0, 3, 5)
+addedge(1, 4, 9)
+addedge(1, 5, 8)
+addedge(2, 6, 12)
+addedge(2, 7, 14)
+addedge(3, 8, 7)
+addedge(8, 9, 5)
+addedge(8, 10, 6)
+addedge(9, 11, 1)
+addedge(9, 12, 10)
+addedge(9, 13, 2)
+
+source = 0
+target = 9
+best_first_search(source, target, v)
+
+
+ 
+------------------------------------------------------------------------------------------------------------------------------------ 
+
+C) Compare the performance and effectiveness of both algorithms.
+
+A* Algorithm:
+
+Performance: A* is an informed search algorithm that uses heuristics to guide its search. It performs optimally and finds the shortest path from the start node to the goal node if the heuristic is admissible and consistent. The algorithm efficiently explores the search space by prioritizing nodes based on the estimated total cost to reach the goal through that node (f(n) = g(n) + h(n), where g(n) is the cost to reach node n from the start and h(n) is the estimated cost from node n to the goal).
+Effectiveness: A* is widely used and effective in various applications like pathfinding in maps, robotics, and artificial intelligence. Its effectiveness relies on the choice of an admissible and consistent heuristic function, which must not overestimate the cost to reach the goal. When the heuristic is well-chosen, A* performs efficiently and finds the optimal solution quickly.
+Recursive Best-First Search (RBFS) Algorithm:
+
+Performance: RBFS is also an informed search algorithm and a variant of Best-First Search. It explores the search space by recursively applying a best-first search strategy but keeps track of alternative paths to the nodes it encounters. This helps in case a dead end is reached and allows the algorithm to backtrack to the next best alternative node. While this approach can be memory-intensive, it can still be efficient in some cases.
+Effectiveness: RBFS can be useful when memory resources are limited and the search space is vast. By backtracking to alternative nodes, RBFS can avoid wasting time exploring unpromising paths. However, it may not guarantee optimal solutions in all scenarios and might expand more nodes compared to A* in some cases.
+Comparison:
+
+A* generally outperforms RBFS in terms of both time and space efficiency when a suitable admissible heuristic is available. It is known for finding optimal solutions quickly in most cases and with relatively fewer node expansions.
+RBFS can be more memory-efficient in certain situations, especially when the search space is large and memory is constrained. However, it may expand more nodes compared to A*, making it less efficient in terms of time.
