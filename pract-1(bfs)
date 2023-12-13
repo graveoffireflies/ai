@@ -1,0 +1,43 @@
+
+A) Implement Breadth first search algorithm for Romanian map problem.
+
+Code:
+class first:
+    def __init__(self,graph,start,goal):
+      self.start = start
+      self.goal = goal
+      self.graph=graph
+    def bfs_shortest_path(self):
+        explored = []
+        queue = [[self.start]]
+        if self.start == self.goal:
+          return "That was easy! Start = goal"
+        while queue:
+              path = queue.pop(0)
+              node = path[-1]
+              if node not in explored:
+                     neighbours = self.graph[node]
+                     for neighbour in neighbours:
+                            new_path = list(path)
+                            new_path.append(neighbour)
+                            queue.append(new_path)
+              if neighbour == self.goal:
+                    return new_path
+              explored.append(node)
+        return "So sorry, but a connecting path doesn't exist :("
+graph = {'A': ['Z', 'S', 'T'],
+         'B': ['U','P', 'G','F'],
+         'C': ['D', 'R', 'P'],
+         'D': ['M'], 'E': ['H'],'I': ['V','N'],
+         'L': ['T','M'],
+         'O': ['Z','S'],
+         'P': ['R'],
+         'U': ['V'],
+         'Z': ['O','A'],
+         'S': ['O','A','R','F'],
+         'T': ['A','L'],
+         'M': ['L','D'],
+        'R': ['S','P','C'],
+        'F': ['S','B']}
+f=first(graph,'A', 'B')
+print(f.bfs_shortest_path()) 
